@@ -1,0 +1,62 @@
+
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.*;
+
+class Event {
+    String name;
+    LocalDate date;
+
+    Event(String name, LocalDate date) {
+        this.name = name;
+        this.date = date;
+    }
+
+    String getName() {
+        return name;
+    }
+
+    LocalDate getDate() {
+        return date;
+    }
+}
+
+public class Main3 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        List<Event> events = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            String name = sc.next();
+            String dateStr = sc.next();
+            events.add(new Event(name, LocalDate.parse(dateStr)));
+        }
+
+        int month = sc.nextInt();
+
+        List<Event> sortedEvents = events.stream()
+                .sorted(Comparator.comparing(Event::getDate))
+                .collect(Collectors.toList());
+
+        System.out.println(
+                sortedEvents.stream()
+                        .map(Event::getName)
+                        .collect(Collectors.joining(" "))
+        );
+
+        Event earliest = Collections.min(events, Comparator.comparing(Event::getDate));
+        System.out.println(earliest.getName());
+
+        Event latest = Collections.max(events, Comparator.comparing(Event::getDate));
+        System.out.println(latest.getName());
+
+        System.out.println(
+                sortedEvents.stream()
+                        .filter(e -> e.getDate().getMonthValue() == month)
+                        .map(Event::getName)
+                        .collect(Collectors.joining(" "))
+        );
+    }
+}
